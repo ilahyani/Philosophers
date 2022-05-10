@@ -6,8 +6,15 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 10:35:53 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/04/30 10:37:07 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/10 11:45:08 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	main(int argc, char** argv)
+{
+	if (error_check(argc, argv))
+		printf("Error\n");
+	return (0);
+}
