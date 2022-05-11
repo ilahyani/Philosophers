@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 11:13:03 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/11 09:50:43 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/11 19:23:34 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,16 @@ int	philo_create(int num)
 		if(pthread_join(philosophers[i], NULL) != 0)
 			return (-1);
 	return (0);
+}
+
+void	ft_perror(char *str)
+{
+	int	i;
+
+	if (!str)
+		str = "(null)";
+	i = 0;
+	while (str[i])
+		write(2, &str[i++], 1);
+	exit(0);
 }
