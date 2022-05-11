@@ -6,7 +6,7 @@
 #    By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/10 10:47:02 by ilahyani          #+#    #+#              #
-#    Updated: 2022/05/10 11:27:05 by ilahyani         ###   ########.fr        #
+#    Updated: 2022/05/11 07:08:00 by ilahyani         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ NAME	=	philo
 
 CC		=	cc
 
-CFLAGS	=	-Wall -Wextra -Werror
+CFLAGS	=	-Wall -Wextra -Werror -pthread
 
 all:	$(NAME)
 
