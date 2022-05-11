@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 11:13:03 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/10 11:44:51 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/11 09:50:43 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,21 @@ int	error_check(int argc, char** argv)
 	while (i < argc)
 		if(!is_int(argv[i++]))
 			return (1);
+	return (0);
+}
+
+int	philo_create(int num)
+{
+	int	i;
+	pthread_t	philosophers[num];
+
+	i = 0;
+	while (i < num)
+		if ((pthread_create(&philosophers[i++], NULL, &routine, NULL)) != 0)
+			return (-1);
+	i = 0;
+	while (i < num)
+		if(pthread_join(philosophers[i], NULL) != 0)
+			return (-1);
 	return (0);
 }
