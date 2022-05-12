@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 11:13:03 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/11 19:23:34 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/12 13:35:20 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ int	philo_create(int num)
 	int	i;
 	pthread_t	philosophers[num];
 
-	i = 0;
-	while (i < num)
+	i = 1;
+	while (i <= num)
 		if ((pthread_create(&philosophers[i++], NULL, &routine, NULL)) != 0)
 			return (-1);
 	i = 0;
