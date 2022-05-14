@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 11:13:03 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/12 13:35:20 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/14 19:37:28 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,11 @@ int	philo_create(int num)
 	i = 1;
 	while (i <= num)
 		if ((pthread_create(&philosophers[i++], NULL, &routine, NULL)) != 0)
-			return (-1);
-	i = 0;
-	while (i < num)
-		if(pthread_join(philosophers[i], NULL) != 0)
-			return (-1);
+			return (1);
+	i = 1;
+	while (i <= num)
+		if(pthread_join(philosophers[i++], NULL) != 0)
+			return (1);
 	return (0);
 }
 
@@ -93,5 +93,5 @@ void	ft_perror(char *str)
 	i = 0;
 	while (str[i])
 		write(2, &str[i++], 1);
-	exit(0);
+	exit(0);			//forbidden??
 }
