@@ -6,11 +6,87 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 11:13:03 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/14 19:37:28 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/16 13:01:46 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	error_check(int argc, char** argv)
+{
+	int	i;
+
+	i = 1;
+	if (argc != 5 && argc != 6)
+		return (1);
+	while (i < argc)
+		if(!is_int(argv[i++]))
+			return (1);
+	return (0);
+}
+
+int	ft_perror(char *str) 		//Print error and free memory
+{
+	int	i;
+
+	if (!str)
+		str = "(null)";
+	i = 0;
+	while (str[i])
+		write(2, &str[i++], 1);
+	return (1);
+}
+
+void	*routine(void *args)
+{
+	//eat()
+	//sleep()
+	//think()
+	(void) args;
+	printf("philo born o_o\n");
+	sleep(2);
+	printf("philo dead x_x\n");
+	return (NULL);
+}
+
+int	philo_create(t_args *args)
+{
+	int	i;
+
+	i = 0;
+	while (i < args->num)
+		if ((pthread_create(&args->philo[i++].ph, NULL, &routine, args)) != 0)
+			return (1);
+	i = 0;
+	while (i < args->num)
+		if(pthread_join(args->philo[i++].ph, NULL) != 0)
+			return (1);
+	return (0);
+}
+
+pthread_mutex_t	*get_args(t_args *args, char **av)
+{
+	pthread_mutex_t	*forks;
+	int	i;
+
+	args->num = ft_atoi(av[1]);
+	args->t_die = ft_atoi(av[2]);
+	args->t_eat = ft_atoi(av[3]);
+	args->t_sleep = ft_atoi(av[4]);
+	if (av[5])
+		args->n_eat = ft_atoi(av[5]);
+	forks = malloc(sizeof(forks) * args->num);
+	args->philo = malloc(sizeof(args->philo) * args->num);
+	i = 0;
+	while (i < args->num)
+	{
+		args->philo[i].id = i;
+		args->philo[i].right_fork = i;
+		args->philo[i].left_fork = (i + 1) % args->num;
+		i++;
+	}
+	return (forks);
+}
 
 int	ft_atoi(char *str)
 {
@@ -53,45 +129,4 @@ int	is_int(char* c)
 			i++;
 		}
 	return (1);
-}
-
-int	error_check(int argc, char** argv)
-{
-	int	i;
-
-	i = 1;
-	if (argc != 5 && argc != 6)
-		return (1);
-	while (i < argc)
-		if(!is_int(argv[i++]))
-			return (1);
-	return (0);
-}
-
-int	philo_create(int num)
-{
-	int	i;
-	pthread_t	philosophers[num];
-
-	i = 1;
-	while (i <= num)
-		if ((pthread_create(&philosophers[i++], NULL, &routine, NULL)) != 0)
-			return (1);
-	i = 1;
-	while (i <= num)
-		if(pthread_join(philosophers[i++], NULL) != 0)
-			return (1);
-	return (0);
-}
-
-void	ft_perror(char *str)
-{
-	int	i;
-
-	if (!str)
-		str = "(null)";
-	i = 0;
-	while (str[i])
-		write(2, &str[i++], 1);
-	exit(0);			//forbidden??
 }

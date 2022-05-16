@@ -6,7 +6,7 @@
 #    By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/10 10:47:02 by ilahyani          #+#    #+#              #
-#    Updated: 2022/05/11 07:08:00 by ilahyani         ###   ########.fr        #
+#    Updated: 2022/05/15 16:36:04 by ilahyani         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ $(NAME):	$(OBJ)
 clean:	
 		rm -rf *.o
 
-fclean:	$(clean)
-		rm -rf $(NAME)
+fclean:		clean
+			rm -rf $(NAME)
 
 re:	fclean all
