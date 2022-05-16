@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 11:13:03 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/16 13:01:46 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/16 19:22:58 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,6 @@ int	philo_create(t_args *args)
 	i = 0;
 	while (i < args->num)
 		if ((pthread_create(&args->philo[i++].ph, NULL, &routine, args)) != 0)
-			return (1);
-	i = 0;
-	while (i < args->num)
-		if(pthread_join(args->philo[i++].ph, NULL) != 0)
 			return (1);
 	return (0);
 }
