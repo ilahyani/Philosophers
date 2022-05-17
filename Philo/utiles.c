@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 11:13:03 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/16 19:22:58 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/17 18:01:53 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	*routine(void *args)
 	//sleep()
 	//think()
 	(void) args;
+	eat(args);
 	printf("philo born o_o\n");
 	sleep(2);
 	printf("philo dead x_x\n");

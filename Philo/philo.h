@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 10:36:52 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/16 13:11:49 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/17 18:00:05 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,6 @@ int				philo_create(t_args *args);
 void			*routine(void *args);
 int				ft_perror(char *str);
 void			eat(t_args *args);
+void			thread_print (t_args *args);
 
 #endif
