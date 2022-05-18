@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 11:13:03 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/17 19:09:29 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/18 17:04:17 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,6 @@ void	*routine(void *args)
 	//sleep()
 	//think()
 	eat(args);
-	printf("philo born o_o\n");
-	sleep(2);
-	printf("philo dead x_x\n");
 	return (NULL);
 }
 
@@ -56,6 +53,10 @@ int	philo_create(t_args *args)
 	i = 0;
 	while (i < args->num)
 		if ((pthread_create(&args->philo[i++].ph, NULL, &routine, args)) != 0)
+			return (1);
+	i = 0;
+	while (i < args->num)
+		if ((pthread_detach(args->philo[i++].ph)) != 0)
 			return (1);
 	return (0);
 }
