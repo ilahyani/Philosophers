@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 10:36:52 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/17 18:00:05 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/17 19:09:13 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@ typedef struct args
 	int				t_eat;
 	int				t_sleep;
 	int				n_eat;
+	t_philo			*philo;
 	pthread_mutex_t	main;
 	pthread_mutex_t	print;
 	pthread_mutex_t	*forks;
-	t_philo			*philo;
 }	t_args;
 
 pthread_mutex_t	*get_args(t_args *args, char **av);
@@ -48,6 +48,6 @@ int				philo_create(t_args *args);
 void			*routine(void *args);
 int				ft_perror(char *str);
 void			eat(t_args *args);
-void			thread_print (t_args *args);
+void			thread_print (t_args *args, char *str);
 
 #endif

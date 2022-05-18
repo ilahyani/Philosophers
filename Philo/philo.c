@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 10:35:53 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/17 17:59:13 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/17 19:08:41 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,19 @@ int	main(int argc, char** argv)
 void	eat(t_args *args)
 {
 	pthread_mutex_lock(&args->forks[args->philo->left_fork]);
-	thread_print(args); //flan picked up a fork
+	thread_print(args, "flan picked up a fork");
 	pthread_mutex_lock(&args->forks[args->philo->right_fork]);
-	thread_print(args); //flan picked up a fork
-	thread_print(args); //flan is eating
+	thread_print(args, "flan picked up a fork");
+	thread_print(args, "flan is eating");
 	usleep(args->t_eat * 1000);
 	pthread_mutex_unlock(&args->forks[args->philo->left_fork]);
 	pthread_mutex_unlock(&args->forks[args->philo->left_fork]);
 }
 
-void	thread_print (t_args *args)
+void	thread_print (t_args *args, char *str)
 {
+	//current time = gettimeoftheday()
 	pthread_mutex_lock(&args->print);
-	printf("somthing\n");
+	printf("%d %s\n" args->philo.id, *str);
 	pthread_mutex_unlock(&args->print);
 }
