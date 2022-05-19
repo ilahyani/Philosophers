@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 11:13:03 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/19 17:24:47 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/19 21:32:15 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,32 @@ int	error_check(int argc, char** argv)
 	return (0);
 }
 
-int	ft_perror(char *str) 		//Print error and free memory
+void	eat(t_philo *philo)
 {
-	int	i;
+	pthread_mutex_lock(&philo->args.forks[philo->right_fork]);
+	thread_print(philo, "picked up the right fork");
+	pthread_mutex_lock(&philo->args.forks[philo->left_fork]);
+	thread_print(philo, "picked up the left fork");
+	thread_print(philo, "is eating");
+	usleep(philo->args.t_eat * 1000);
+	pthread_mutex_unlock(&philo->args.forks[philo->left_fork]);
+	pthread_mutex_unlock(&philo->args.forks[philo->left_fork]);
+}
 
-	if (!str)
-		str = "(null)";
-	i = 0;
-	while (str[i])
-		write(2, &str[i++], 1);
-	return (1);
+void	thread_print (t_philo *philo, char *str)
+{
+	pthread_mutex_lock(&philo->args.print);
+	printf("%u %d %s\n", ft_time() - philo->start, philo->id + 1, str);
+	sleep(2);
+	pthread_mutex_unlock(&philo->args.print);
+}
+
+unsigned int	ft_time(void)
+{
+	struct timeval	current_time;
+
+	gettimeofday(&current_time, NULL);
+	return ((current_time.tv_sec * 1000) + (current_time.tv_usec / 1000));
 }
 
 void	*routine(void *philo)
@@ -55,9 +71,9 @@ int	philo_create(t_philo *philo)
 	while (++i < philo->args.num)
 		if ((pthread_create(&philo[i].ph, NULL, &routine, &philo[i])) != 0)
 			return (1);
-	i = 0;
-	while (i < philo->args.num)
-		if ((pthread_detach(philo[i++].ph)) != 0)
+	i = -1;
+	while (++i < philo->args.num)
+		if ((pthread_detach(philo[i].ph)) != 0)
 			return (1);
 	return (0);
 }
@@ -78,6 +94,7 @@ t_philo	*get_args(char **av)
 	while (i < philo->args.num)
 	{
 		philo[i].id = i;
+		philo[i].start = ft_time();
 		philo[i].right_fork = i;
 		philo[i].left_fork = (i + 1) % philo->args.num;
 		philo[i].args.forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));

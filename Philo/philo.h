@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 10:36:52 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/19 18:57:25 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/19 21:30:26 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,21 +34,21 @@ typedef struct args
 typedef	struct philo
 {
 	pthread_t	ph;
+	int			start;
 	int			id;
 	int			left_fork;
 	int			right_fork;
 	t_args		args;
 }	t_philo;
 
-t_philo	*get_args(char **av);
+t_philo			*get_args(char **av);
 int				is_int(char* c);
 int				error_check(int argc, char** argv);
 int				ft_atoi(char *str);
 int				philo_create(t_philo *philo);
 void			*routine(void *philo);
-int				ft_perror(char *str);
 void			eat(t_philo *philo);
-int				ft_time(void);
+unsigned int	ft_time(void);
 void			thread_print (t_philo *philo, char *str);
 
 #endif
