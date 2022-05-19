@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 11:13:03 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/18 17:04:17 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/19 17:24:47 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ int	error_check(int argc, char** argv)
 {
 	int	i;
 
-	i = 1;
 	if (argc != 5 && argc != 6)
 		return (1);
+	i = 1;
 	while (i < argc)
 		if(!is_int(argv[i++]))
 			return (1);
@@ -37,52 +37,53 @@ int	ft_perror(char *str) 		//Print error and free memory
 	return (1);
 }
 
-void	*routine(void *args)
+void	*routine(void *philo)
 {
-	//eat()
-	//sleep()
-	//think()
-	eat(args);
+	t_philo *p;
+	
+	p = (t_philo *)philo;
+	while (1)
+		eat(p);
 	return (NULL);
 }
 
-int	philo_create(t_args *args)
+int	philo_create(t_philo *philo)
 {
 	int	i;
 
-	i = 0;
-	while (i < args->num)
-		if ((pthread_create(&args->philo[i++].ph, NULL, &routine, args)) != 0)
+	i = -1;
+	while (++i < philo->args.num)
+		if ((pthread_create(&philo[i].ph, NULL, &routine, &philo[i])) != 0)
 			return (1);
 	i = 0;
-	while (i < args->num)
-		if ((pthread_detach(args->philo[i++].ph)) != 0)
+	while (i < philo->args.num)
+		if ((pthread_detach(philo[i++].ph)) != 0)
 			return (1);
 	return (0);
 }
 
-pthread_mutex_t	*get_args(t_args *args, char **av)
+t_philo	*get_args(char **av)
 {
-	pthread_mutex_t	*forks;
+	t_philo *philo;
 	int	i;
 
-	args->num = ft_atoi(av[1]);
-	args->t_die = ft_atoi(av[2]);
-	args->t_eat = ft_atoi(av[3]);
-	args->t_sleep = ft_atoi(av[4]);
+	philo = (t_philo *)malloc(sizeof(t_philo) * ft_atoi(av[1]));
+	philo->args.num = ft_atoi(av[1]);
+	philo->args.t_die = ft_atoi(av[2]);
+	philo->args.t_eat = ft_atoi(av[3]);
+	philo->args.t_sleep = ft_atoi(av[4]);
 	if (av[5])
-		args->n_eat = ft_atoi(av[5]);
-	forks = malloc(sizeof(forks) * args->num);
-	args->philo = malloc(sizeof(args->philo) * args->num);
+		philo->args.n_eat = ft_atoi(av[5]);
 	i = 0;
-	while (i < args->num)
+	while (i < philo->args.num)
 	{
-		args->philo[i].id = i;
-		args->philo[i].right_fork = i;
-		args->philo[i].left_fork = (i + 1) % args->num;
+		philo[i].id = i;
+		philo[i].right_fork = i;
+		philo[i].left_fork = (i + 1) % philo->args.num;
+		philo[i].args.forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
 		i++;
 	}
-	return (forks);
+	return (philo);
 }
 
 int	ft_atoi(char *str)
