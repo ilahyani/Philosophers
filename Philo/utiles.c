@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 11:13:03 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/19 21:32:15 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/20 06:46:06 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,16 +65,16 @@ void	*routine(void *philo)
 
 int	philo_create(t_philo *philo)
 {
-	int	i;
+	int				i;
+	pthread_attr_t	detachedthread;
 
+	pthread_attr_init(&detachedthread);
+	pthread_attr_setdetachstate(&detachedthread, PTHREAD_CREATE_DETACHED);
 	i = -1;
 	while (++i < philo->args.num)
-		if ((pthread_create(&philo[i].ph, NULL, &routine, &philo[i])) != 0)
+		if ((pthread_create(&philo[i].ph, &detachedthread, &routine, &philo[i])) != 0)
 			return (1);
-	i = -1;
-	while (++i < philo->args.num)
-		if ((pthread_detach(philo[i].ph)) != 0)
-			return (1);
+	pthread_attr_destroy(&detachedthread);
 	return (0);
 }
 
