@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 10:36:52 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/21 05:27:14 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/21 09:54:02 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,10 @@ typedef	struct philo
 {
 	pthread_t	ph;
 	int			start;
-	int			last_meal;
 	int			id;
 	int			left_fork;
 	int			right_fork;
+	int			last_meal;
 	t_args		args;
 }	t_philo;
 
@@ -48,8 +48,9 @@ int				error_check(int argc, char** argv);
 int				ft_atoi(char *str);
 int				philo_create(t_philo *philo);
 void			*routine(void *philo);
-void			eat(t_philo *philo);
+int				eat(t_philo *philo);
 int				ft_time(void);
 void			thread_print (t_philo *philo, char *str);
+void			*is_dead(void *philo);
 
 #endif

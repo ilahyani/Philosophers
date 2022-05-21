@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 11:13:03 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/21 06:47:02 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/21 12:28:21 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,82 @@ int	error_check(int argc, char** argv)
 	return (0);
 }
 
-void	eat(t_philo *philo)
+int	eat(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->args.forks[philo->right_fork]);
 	thread_print(philo, "picked up the right fork");
-	pthread_mutex_lock(&philo->args.forks[philo->left_fork]);
-	thread_print(philo, "picked up the left fork");
-	thread_print(philo, "is eating...");
-	philo->last_meal = ft_time() - philo->start;
-	usleep(philo->args.t_eat * 1000);
-	pthread_mutex_unlock(&philo->args.forks[philo->right_fork]);
-	pthread_mutex_unlock(&philo->args.forks[philo->left_fork]);
+	if (philo->left_fork)
+	{
+		pthread_mutex_lock(&philo->args.forks[philo->left_fork]);
+		thread_print(philo, "picked up the left fork");
+		thread_print(philo, "is eating...");
+		philo->last_meal = ft_time() - philo->start;
+		usleep(philo->args.t_eat * 1000);
+		pthread_mutex_unlock(&philo->args.forks[philo->right_fork]);
+		pthread_mutex_unlock(&philo->args.forks[philo->left_fork]);
+		return (1);
+	}
+	philo->last_meal = 0;
+	return (0);
+}
+
+void	*routine(void *philo)
+{
+	t_philo 		*p;
+	// pthread_attr_t	detachedthread;
+	// pthread_t		death_check;
+
+	p = (t_philo *)philo;
+	// pthread_attr_init(&detachedthread);
+	// pthread_attr_setdetachstate(&detachedthread, PTHREAD_CREATE_DETACHED);
+	// if ((pthread_create(&death_check, &detachedthread, &is_dead, &p)) != 0)
+	// 	return (NULL);
+	while (1)
+	{
+		if (eat(p))
+		{
+			thread_print(philo, "is thinking...");
+			thread_print(philo, "is sleeping...");
+			usleep(p->args.t_sleep * 1000);
+		}
+		//printf("%d\n", ft_time() - p->last_meal);
+		if (ft_time() - p->last_meal >= p->args.t_die)
+		{
+			thread_print(philo, "is dead");
+			pthread_mutex_unlock(&p->args.main);
+		}
+		usleep(1000000);
+	}
+	return (NULL);
+}
+
+void	*is_dead(void *philo)
+{
+	t_philo *p;
+	
+	p = (t_philo *)philo;
+	printf("here\n");
+	if (ft_time() - p->last_meal >= p->args.t_die)
+	{
+		thread_print(philo, "is dead");
+		pthread_mutex_unlock(&p->args.main);
+	}
+	return (NULL);
+}
+
+int	philo_create(t_philo *philo)
+{
+	int				i;
+	pthread_attr_t	detachedthread;
+
+	pthread_attr_init(&detachedthread);
+	pthread_attr_setdetachstate(&detachedthread, PTHREAD_CREATE_DETACHED);
+	i = -1;
+	while (++i < philo->args.num)
+		if ((pthread_create(&philo[i].ph, &detachedthread, &routine, &philo[i])) != 0)
+			return (1);
+	pthread_attr_destroy(&detachedthread);
+	return (0);
 }
 
 void	thread_print (t_philo *philo, char *str)
@@ -53,72 +118,33 @@ int	ft_time(void)
 	return ((current_time.tv_sec * 1000) + (current_time.tv_usec / 1000));
 }
 
-void	*routine(void *philo)
-{
-	t_philo *p;
-	
-	p = (t_philo *)philo;
-	while (1)
-	{
-		eat(p);
-		thread_print(philo, "is thinking...");
-		thread_print(philo, "is sleeping...");
-		usleep(p->args.t_sleep * 1000);
-	}
-	return (NULL);
-}
-
-void	*is_dead(void *philo)
-{
-	t_philo *p;
-	
-	p = (t_philo *)philo;
-	if (ft_time() - p->last_meal >= p->args.t_die)
-	{
-		thread_print(philo, "is dead");
-		pthread_mutex_unlock(&p->args.main);
-	}
-	return (NULL);
-}
-
-int	philo_create(t_philo *philo)
-{
-	int				i;
-	pthread_attr_t	detachedthread;
-	pthread_t		death_check;
-
-	pthread_attr_init(&detachedthread);
-	pthread_attr_setdetachstate(&detachedthread, PTHREAD_CREATE_DETACHED);
-	i = -1;
-	while (++i < philo->args.num)
-		if ((pthread_create(&philo[i].ph, &detachedthread, &routine, &philo[i])) != 0)
-			return (1);
-	if ((pthread_create(&death_check, &detachedthread, &is_dead, &philo[i])) != 0)
-			return (1);
-	pthread_attr_destroy(&detachedthread);
-	return (0);
-}
-
 t_philo	*get_args(char **av)
 {
 	t_philo *philo;
 	int	i;
 
 	philo = (t_philo *)malloc(sizeof(t_philo) * ft_atoi(av[1]));
+	if (!philo)
+		return (NULL);
 	philo->args.num = ft_atoi(av[1]);
 	philo->args.t_die = ft_atoi(av[2]);
 	philo->args.t_eat = ft_atoi(av[3]);
 	philo->args.t_sleep = ft_atoi(av[4]);
 	if (av[5])
 		philo->args.n_eat = ft_atoi(av[5]);
+	philo->args.forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * philo->args.num);
 	i = 0;
 	while (i < philo->args.num)
 	{
 		philo[i].id = i;
 		philo[i].start = ft_time();
 		philo[i].right_fork = i;
-		philo[i].left_fork = (i + 1) % philo->args.num;
-		philo[i].args.forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+		if (philo->args.num > 1)
+			philo[i].left_fork = (i + 1) % philo->args.num;
+		else
+			philo[i].left_fork = 0;
+		if (!philo[i].args.forks)
+			return (NULL);
 		i++;
 	}
 	return (philo);
