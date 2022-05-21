@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 11:13:03 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/20 06:46:06 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/21 06:47:02 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,10 @@ void	eat(t_philo *philo)
 	thread_print(philo, "picked up the right fork");
 	pthread_mutex_lock(&philo->args.forks[philo->left_fork]);
 	thread_print(philo, "picked up the left fork");
-	thread_print(philo, "is eating");
+	thread_print(philo, "is eating...");
+	philo->last_meal = ft_time() - philo->start;
 	usleep(philo->args.t_eat * 1000);
-	pthread_mutex_unlock(&philo->args.forks[philo->left_fork]);
+	pthread_mutex_unlock(&philo->args.forks[philo->right_fork]);
 	pthread_mutex_unlock(&philo->args.forks[philo->left_fork]);
 }
 
@@ -41,11 +42,10 @@ void	thread_print (t_philo *philo, char *str)
 {
 	pthread_mutex_lock(&philo->args.print);
 	printf("%u %d %s\n", ft_time() - philo->start, philo->id + 1, str);
-	sleep(2);
 	pthread_mutex_unlock(&philo->args.print);
 }
 
-unsigned int	ft_time(void)
+int	ft_time(void)
 {
 	struct timeval	current_time;
 
@@ -59,7 +59,25 @@ void	*routine(void *philo)
 	
 	p = (t_philo *)philo;
 	while (1)
+	{
 		eat(p);
+		thread_print(philo, "is thinking...");
+		thread_print(philo, "is sleeping...");
+		usleep(p->args.t_sleep * 1000);
+	}
+	return (NULL);
+}
+
+void	*is_dead(void *philo)
+{
+	t_philo *p;
+	
+	p = (t_philo *)philo;
+	if (ft_time() - p->last_meal >= p->args.t_die)
+	{
+		thread_print(philo, "is dead");
+		pthread_mutex_unlock(&p->args.main);
+	}
 	return (NULL);
 }
 
@@ -67,12 +85,15 @@ int	philo_create(t_philo *philo)
 {
 	int				i;
 	pthread_attr_t	detachedthread;
+	pthread_t		death_check;
 
 	pthread_attr_init(&detachedthread);
 	pthread_attr_setdetachstate(&detachedthread, PTHREAD_CREATE_DETACHED);
 	i = -1;
 	while (++i < philo->args.num)
 		if ((pthread_create(&philo[i].ph, &detachedthread, &routine, &philo[i])) != 0)
+			return (1);
+	if ((pthread_create(&death_check, &detachedthread, &is_dead, &philo[i])) != 0)
 			return (1);
 	pthread_attr_destroy(&detachedthread);
 	return (0);
