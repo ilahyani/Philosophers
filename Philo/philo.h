@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 10:36:52 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/21 05:27:14 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/22 10:43:55 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,19 @@ typedef struct args
 	int				n_eat;
 	pthread_mutex_t	main;
 	pthread_mutex_t	print;
+	pthread_mutex_t	death;
 	pthread_mutex_t	*forks;
 }	t_args;
 
 typedef	struct philo
 {
 	pthread_t	ph;
-	int			start;
-	int			last_meal;
+	long		start;
+	long		last_meal;
 	int			id;
 	int			left_fork;
 	int			right_fork;
+	int			is_dead;
 	t_args		args;
 }	t_philo;
 
@@ -48,8 +50,9 @@ int				error_check(int argc, char** argv);
 int				ft_atoi(char *str);
 int				philo_create(t_philo *philo);
 void			*routine(void *philo);
-void			eat(t_philo *philo);
-int				ft_time(void);
+int				eat(t_philo *philo);
+long			ft_time(void);
 void			thread_print (t_philo *philo, char *str);
+void			*is_dead(void *philo);
 
 #endif
