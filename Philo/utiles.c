@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 11:13:03 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/21 18:59:55 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/22 10:51:22 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,14 @@ void	*routine(void *philo)
 {
 	t_philo 		*p;
 	t_args			a;
-	//pthread_t		death_check;
+	pthread_t		death_check;
 
 	p = (t_philo *)philo;
 	a = p->args;
-	// if ((pthread_create(&death_check, NULL, &is_dead, philo)) != 0)
-	// 		return (NULL);
+	if ((pthread_create(&death_check, NULL, &is_dead, philo)) != 0)
+		return (NULL);
+	if ((pthread_detach(death_check)) != 0)
+		return (NULL);
 	while (1)
 	{
 		if (eat(p))
@@ -49,57 +51,49 @@ void	*routine(void *philo)
 			thread_print(philo, "is sleeping...");
 			usleep(p->args.t_sleep * 1000);
 		}
-		//printf ("%ld - %ld = %ld > %d\n", ft_time(), p->last_meal, ft_time() - p->last_meal, p->args.t_die);
-		if ((ft_time() - p->start) - p->last_meal > a.t_die)
-		{
-				pthread_mutex_lock(&p->args.death);
-				pthread_mutex_unlock(&p->args.main);
-				thread_print(philo, "is dead");
-				return (NULL);
-		}
+		// if ((ft_time() - p->start) - p->last_meal > a.t_die)
+		// {
+		// 		pthread_mutex_lock(&p->args.death);
+		// 		pthread_mutex_unlock(&p->args.main);
+		// 		thread_print(philo, "is dead");
+		// 		return (NULL);
+		// }
 		// usleep(10000);
 	}
 	return (NULL);
 }
 
-// void	*is_dead(void *philo)
-// {
-// 	// t_philo	*p;
+void	*is_dead(void *philo)
+{
+	t_philo	*p;
 
-// 	// p = (t_philo *)philo;
-// 	// pthread_mutex_lock(&p->args.death);
-// 	// while (1)
-// 	// {
-// 	// 	if (ft_time() - p->last_meal >= p->args.t_die)
-// 	// 			pthread_mutex_unlock(&p->args.main);
-// 	// 			thread_print(philo, "is dead");
-// 	// 	pthread_mutex_lock(&p->args.death);
-// 	// }
-// }
+	p = (t_philo *)philo;
+	//pthread_mutex_lock(&p->args.death);
+	while (1)
+	{
+		if (p->last_meal != -1 && ft_time() - p->last_meal >= p->args.t_die)
+		{
+			//p->is_dead = 1;
+			thread_print(philo, "is dead");
+			pthread_mutex_unlock(&p->args.main);
+			return (NULL);
+		}
+	}
+}
 
 int	philo_create(t_philo *philo)
 {
 	int	i;
 
-	i = 0;
-	while (i < philo->args.num)
-	{
+	i = -1;
+	while (++i < philo->args.num)
 		if ((pthread_create(&philo[i].ph, NULL, &routine, &philo[i])) != 0)
 			return (1);
-		i++;
-	}
-	i = 0;
-	while (i < philo->args.num)
-		if ((pthread_detach(philo[i++].ph) != 0))
+	i = -1;
+	while (++i < philo->args.num)
+		if ((pthread_detach(philo[i].ph) != 0))
 			return (1);
 	return (0);
-}
-
-void	thread_print (t_philo *philo, char *str)
-{
-	pthread_mutex_lock(&philo->args.print);
-	printf("%ld %d %s\n", ft_time() - philo->start, philo->id + 1, str);
-	pthread_mutex_unlock(&philo->args.print);
 }
 
 t_philo	*get_args(char **av)
@@ -125,12 +119,23 @@ t_philo	*get_args(char **av)
 		philo[i].left_fork = (i + 1) % philo->args.num;
 		if (philo->args.num < 2)
 			philo[i].left_fork = -1;
+		philo[i].last_meal = -1;
+		philo[i].is_dead = 0;
 		philo[i].args.forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
 		if (!philo[i].args.forks)
 			return (NULL);
 		pthread_mutex_init(&philo->args.forks[i], NULL);
 	}
 	return (philo);
+}
+
+void	thread_print (t_philo *philo, char *str)
+{
+	// if (philo->is_dead)
+	// 	return ;
+	pthread_mutex_lock(&philo->args.print);
+	printf("%ld philo %d %s\n", ft_time() - philo->start, philo->id + 1, str);
+	pthread_mutex_unlock(&philo->args.print);
 }
 
 long	ft_time(void)

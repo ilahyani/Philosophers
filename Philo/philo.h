@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 10:36:52 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/21 18:04:54 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/22 10:43:55 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef	struct philo
 	int			id;
 	int			left_fork;
 	int			right_fork;
+	int			is_dead;
 	t_args		args;
 }	t_philo;
 
