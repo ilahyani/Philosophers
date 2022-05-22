@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 11:13:03 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/22 15:44:58 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/22 19:02:06 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ void	*routine(void *philo)
 	{
 		if (eat(p))
 		{
-			thread_print(philo, "is thinking...");
 			thread_print(philo, "is sleeping...");
 			usleep(p->args.t_sleep * 1000);
+			thread_print(philo, "is thinking...");
 		}
 	}
 	return (NULL);
@@ -57,6 +57,7 @@ void	*is_dead(void *philo)
 	{
 		if (p->last_meal != -1 && (ft_time() - p->start) - p->last_meal >= p->args.t_die)
 		{
+			pthread_mutex_lock(&p->args.death);
 			thread_print(philo, "died");
 			pthread_mutex_unlock(&p->args.main);
 			return (NULL);
@@ -71,9 +72,9 @@ int	philo_create(t_philo *philo)
 	i = -1;
 	while (++i < philo->args.num)
 	{
+		philo[i].start = ft_time();
 		if ((pthread_create(&philo[i].ph, NULL, &routine, &philo[i])) != 0)
 			return (1);
-		philo[i].start = ft_time();
 	}
 	i = -1;
 	while (++i < philo->args.num)
@@ -90,15 +91,15 @@ t_philo	*get_args(char **av)
 	philo = (t_philo *)malloc(sizeof(t_philo) * ft_atoi(av[1]));
 	if (!philo)
 		return (NULL);
-	philo->args.num = ft_atoi(av[1]);
-	philo->args.t_die = ft_atoi(av[2]);
-	philo->args.t_eat = ft_atoi(av[3]);
-	philo->args.t_sleep = ft_atoi(av[4]);
-	if (av[5])
-		philo->args.n_eat = ft_atoi(av[5]);
 	i = -1;
-	while (++i < philo->args.num)
+	while (++i < ft_atoi(av[1]))
 	{
+		philo[i].args.num = ft_atoi(av[1]);
+		philo[i].args.t_die = ft_atoi(av[2]);
+		philo[i].args.t_eat = ft_atoi(av[3]);
+		philo[i].args.t_sleep = ft_atoi(av[4]);
+		if (av[5])
+			philo[i].args.n_eat = ft_atoi(av[5]);
 		philo[i].id = i;
 		philo[i].right_fork = i;
 		philo[i].left_fork = (i + 1) % philo->args.num;
@@ -108,7 +109,7 @@ t_philo	*get_args(char **av)
 		philo[i].args.forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
 		if (!philo[i].args.forks)
 			return (NULL);
-		pthread_mutex_init(&philo->args.forks[i], NULL);
+		pthread_mutex_init(philo[i].args.forks, NULL);
 	}
 	return (philo);
 }

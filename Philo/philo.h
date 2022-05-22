@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 10:36:52 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/22 12:29:41 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/22 18:29:52 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 typedef struct args
 {
 	int				num;
-	int				t_die;
+	long			t_die;
 	int				t_eat;
 	int				t_sleep;
 	int				n_eat;

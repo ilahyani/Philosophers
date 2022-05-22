@@ -6,7 +6,7 @@
 #    By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/10 10:47:02 by ilahyani          #+#    #+#              #
-#    Updated: 2022/05/22 11:04:45 by ilahyani         ###   ########.fr        #
+#    Updated: 2022/05/22 18:29:32 by ilahyani         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,8 +22,10 @@ CFLAGS	=	-Wall -Wextra -Werror -pthread -g
 
 all:	$(NAME)
 
+HDR		=	./philo.h
+
 $(NAME):	$(OBJ)
-			$(CC) $(CFLAGS) -o $@ $^
+			$(CC) $(CFLAGS) -I $(HDR) -o $@ $^
 
 #temp wildcard
 
