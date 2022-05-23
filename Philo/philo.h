@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 10:36:52 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/22 18:29:52 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/23 11:56:16 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,27 +21,28 @@
 
 typedef struct args
 {
-	int				num;
-	long			t_die;
-	int				t_eat;
-	int				t_sleep;
-	int				n_eat;
 	pthread_mutex_t	main;
 	pthread_mutex_t	print;
 	pthread_mutex_t	death;
-	pthread_mutex_t	*forks;
+	pthread_mutex_t	*fork;
+	long			t_die;
+	int				t_sleep;
+	int				n_eat;
+	int				t_eat;
+	int				num;
 }	t_args;
 
 typedef	struct philo
 {
 	pthread_t	ph;
+	t_args		args;
 	long		start;
 	long		last_meal;
-	int			id;
 	int			left_fork;
 	int			right_fork;
-	t_args		args;
+	int			id;
 }	t_philo;
+
 
 t_philo			*get_args(char **av);
 int				is_int(char* c);

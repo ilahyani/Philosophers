@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 10:35:53 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/22 17:54:01 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/23 11:23:23 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ int	main(int argc, char** argv)
 		if(printf("Thread creation failed\n"))
 			return (0);
 	if ((pthread_create(&death_check, NULL, &is_dead, philo)) != 0)
-		if(printf("unexpected error occurred \n"))
+		if(printf("unexpected error occurred\n"))
 			return (0);
 	if ((pthread_detach(death_check)) != 0)
-		if(printf("unexpected error occurred \n"))
+		if(printf("unexpected error occurred\n"))
 			return (0);
 	pthread_mutex_lock(&philo->args.main);
 	pthread_mutex_unlock(&philo->args.main);

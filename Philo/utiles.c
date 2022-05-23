@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 11:13:03 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/22 19:02:06 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/23 11:56:03 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,19 @@
 
 int	eat(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->args.forks[philo->right_fork]);
+	pthread_mutex_lock(&philo->args.fork[philo->right_fork]);
 	thread_print(philo, "picked up the right fork");
+	//printf("fork -->%d\n", philo->right_fork);
 	if (philo->left_fork != -1)
 	{
-		pthread_mutex_lock(&philo->args.forks[philo->left_fork]);
+		pthread_mutex_lock(&philo->args.fork[philo->left_fork]);
 		thread_print(philo, "picked up the left fork");
+		//printf("fork --> %d\n", philo->left_fork);
 		thread_print(philo, "is eating...");
 		usleep(philo->args.t_eat * 1000);
 		philo->last_meal = ft_time() - philo->start;
-		pthread_mutex_unlock(&philo->args.forks[philo->left_fork]);
-		pthread_mutex_unlock(&philo->args.forks[philo->right_fork]);
+		pthread_mutex_unlock(&philo->args.fork[philo->left_fork]);
+		pthread_mutex_unlock(&philo->args.fork[philo->right_fork]);
 		return (1);
 	}
 	philo->last_meal = 0;
@@ -55,7 +57,7 @@ void	*is_dead(void *philo)
 	p = (t_philo *)philo;
 	while (1)
 	{
-		if (p->last_meal != -1 && (ft_time() - p->start) - p->last_meal >= p->args.t_die)
+		if ((ft_time() - p->start) - p->last_meal >= p->args.t_die)
 		{
 			pthread_mutex_lock(&p->args.death);
 			thread_print(philo, "died");
@@ -106,10 +108,11 @@ t_philo	*get_args(char **av)
 		if (philo->args.num < 2)
 			philo[i].left_fork = -1;
 		philo[i].last_meal = -1;
-		philo[i].args.forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-		if (!philo[i].args.forks)
+		philo[i].args.fork = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+		if (!philo[i].args.fork)
 			return (NULL);
-		pthread_mutex_init(philo[i].args.forks, NULL);
+		pthread_mutex_init(philo[i].args.fork, NULL);
+		//printf("--> fork %d\n", i);
 	}
 	return (philo);
 }
