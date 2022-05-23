@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 10:36:52 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/23 11:56:16 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/23 15:00:03 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,12 @@ typedef struct args
 typedef	struct philo
 {
 	pthread_t	ph;
-	t_args		args;
+	t_args		*args;
 	long		start;
 	long		last_meal;
 	int			left_fork;
 	int			right_fork;
+	int			meals;
 	int			id;
 }	t_philo;
 
