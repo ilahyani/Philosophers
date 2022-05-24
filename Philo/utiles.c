@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 11:13:03 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/24 18:07:13 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/24 18:52:25 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,11 @@ int	eat(t_philo *philo)
 		thread_print(philo, "is eating...");
 		ft_usleep(philo->args->t_eat * 1000);
 		philo->last_meal = ft_time();
-		if (philo->meals)
-			(philo->meals)++;
-		//printf("%d had taken %d meals\n", philo->id, philo->meals);
+		(philo->meals)++;
 		pthread_mutex_unlock(&philo->args->fork[philo->left_fork]);
 		pthread_mutex_unlock(&philo->args->fork[philo->right_fork]);
 		return (1);
 	}
-	philo->last_meal = 0;
 	return (0);
 }
 
@@ -78,6 +75,7 @@ void	*kill_thread(void *philo)
 			if (i == p->args->num)
 			{
 				pthread_mutex_lock(&p->args->print);
+				printf("All philosophers are served.\n");
 				pthread_mutex_unlock(&p->args->main);
 				return (NULL);
 			}
@@ -201,12 +199,17 @@ int	error_check(int argc, char** argv)
 {
 	int	i;
 
-	if ((argc != 5 && argc != 6) || ft_atoi(argv[5]) < 1)
+	if ((argc != 5 && argc != 6))
 		return (1);
-	i = 1;
-	while (i < argc)
-		if(!is_int(argv[i++]))
+	i = 0;
+	while (++i < argc)
+	{
+		if(!is_int(argv[i]))
 			return (1);
+		if (i == 5)
+			if (argv[i] && ft_atoi(argv[i]) < 1)
+				return (1);
+	}
 	return (0);
 }
 
