@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 11:13:03 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/24 11:11:43 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/24 18:07:13 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,11 @@ int	eat(t_philo *philo)
 		pthread_mutex_lock(&philo->args->fork[philo->left_fork]);
 		thread_print(philo, "picked up the left fork");
 		thread_print(philo, "is eating...");
-		usleep(philo->args->t_eat * 1000);
+		ft_usleep(philo->args->t_eat * 1000);
 		philo->last_meal = ft_time();
-		(philo->meals)++;
-		printf("%d had taken %d meals\n", philo->id, philo->meals);
+		if (philo->meals)
+			(philo->meals)++;
+		//printf("%d had taken %d meals\n", philo->id, philo->meals);
 		pthread_mutex_unlock(&philo->args->fork[philo->left_fork]);
 		pthread_mutex_unlock(&philo->args->fork[philo->right_fork]);
 		return (1);
@@ -36,19 +37,16 @@ int	eat(t_philo *philo)
 void	*routine(void *philo)
 {
 	t_philo	*p;
-	int		i;
 
 	p = (t_philo *)philo;
 	while (1)
 	{
-		i = -1;
 		if (p->id % 2 == 0)
-			while (++i < 5)
-				usleep(20);
+			ft_usleep(1000);
 		if (eat(p))
 		{
 			thread_print(philo, "is sleeping...");
-			usleep(p->args->t_sleep * 1000);
+			ft_usleep(p->args->t_sleep * 1000);
 			thread_print(philo, "is thinking...");
 		}
 	}
@@ -71,15 +69,18 @@ void	*kill_thread(void *philo)
 			pthread_mutex_unlock(&p->args->main);
 			return (NULL);
 		}
-		i = -1;
-		while (++i < p->args->num)
-			if ((p + i)->meals < p->args->num_of_meals)
-				break ;
-		if (i == p->args->num)
+		if (p->args->num_of_meals)
 		{
-			pthread_mutex_lock(&p->args->print);
-			pthread_mutex_unlock(&p->args->main);
-			return (NULL);
+			i = -1;
+			while (++i < p->args->num)
+				if ((p + i)->meals < p->args->num_of_meals)
+					break ;
+			if (i == p->args->num)
+			{
+				pthread_mutex_lock(&p->args->print);
+				pthread_mutex_unlock(&p->args->main);
+				return (NULL);
+			}
 		}
 	}
 }
@@ -133,6 +134,7 @@ t_philo	*get_args(char **av)
 		philo[i].left_fork = (i + 1) % args->num;
 		if (args->num < 2)
 			philo[i].left_fork = -1;
+			//philo[i].left_fork = philo[i].right_fork;
 		philo[i].last_meal = ft_time();
 		philo[i].meals = 0;
 		philo[i].args = args;
@@ -188,13 +190,10 @@ int	is_int(char* c)
 {
 	int	i;
 	
-	i = 0;
-	while (c[i])
-		{
+	i = -1;
+	while (c[++i])
 			if (c[i] < '0' || c[i] > '9')
 				return (0);
-			i++;
-		}
 	return (1);
 }
 
@@ -202,11 +201,20 @@ int	error_check(int argc, char** argv)
 {
 	int	i;
 
-	if (argc != 5 && argc != 6)
+	if ((argc != 5 && argc != 6) || ft_atoi(argv[5]) < 1)
 		return (1);
 	i = 1;
 	while (i < argc)
 		if(!is_int(argv[i++]))
 			return (1);
 	return (0);
+}
+
+void ft_usleep(useconds_t time)
+{
+	long	t_time;
+
+	t_time = ft_time();
+	while (ft_time() - t_time < time / 1000)
+		usleep(300);
 }

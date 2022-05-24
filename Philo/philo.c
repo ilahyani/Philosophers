@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 10:35:53 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/24 11:08:21 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/24 18:01:22 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	main(int argc, char** argv)
 {
-	t_philo			*philo = NULL;
+	t_philo			*philo;
 	pthread_t		death_check;
 
 	if (error_check(argc, argv))

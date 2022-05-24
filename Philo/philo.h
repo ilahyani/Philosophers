@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 10:36:52 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/24 11:09:03 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/24 17:34:17 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,6 @@ int				eat(t_philo *philo);
 long			ft_time(void);
 void			thread_print (t_philo *philo, char *str);
 void			*kill_thread(void *philo);
+void			ft_usleep(useconds_t time);
 
 #endif
