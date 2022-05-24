@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 11:13:03 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/23 15:09:28 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/24 11:11:43 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	eat(t_philo *philo)
 		usleep(philo->args->t_eat * 1000);
 		philo->last_meal = ft_time();
 		(philo->meals)++;
+		printf("%d had taken %d meals\n", philo->id, philo->meals);
 		pthread_mutex_unlock(&philo->args->fork[philo->left_fork]);
 		pthread_mutex_unlock(&philo->args->fork[philo->right_fork]);
 		return (1);
@@ -35,12 +36,15 @@ int	eat(t_philo *philo)
 void	*routine(void *philo)
 {
 	t_philo	*p;
+	int		i;
 
 	p = (t_philo *)philo;
 	while (1)
 	{
+		i = -1;
 		if (p->id % 2 == 0)
-			usleep(100);
+			while (++i < 5)
+				usleep(20);
 		if (eat(p))
 		{
 			thread_print(philo, "is sleeping...");
@@ -51,9 +55,10 @@ void	*routine(void *philo)
 	return (NULL);
 }
 
-void	*is_dead(void *philo)
+void	*kill_thread(void *philo)
 {
 	t_philo	*p;
+	int		i;
 
 	p = (t_philo *)philo;
 	while (1)
@@ -62,6 +67,16 @@ void	*is_dead(void *philo)
 		{
 			pthread_mutex_lock(&p->args->death);
 			thread_print(philo, "died");
+			pthread_mutex_lock(&p->args->print);
+			pthread_mutex_unlock(&p->args->main);
+			return (NULL);
+		}
+		i = -1;
+		while (++i < p->args->num)
+			if ((p + i)->meals < p->args->num_of_meals)
+				break ;
+		if (i == p->args->num)
+		{
 			pthread_mutex_lock(&p->args->print);
 			pthread_mutex_unlock(&p->args->main);
 			return (NULL);
@@ -104,7 +119,7 @@ t_philo	*get_args(char **av)
 	args->t_eat = ft_atoi(av[3]);
 	args->t_sleep = ft_atoi(av[4]);
 	if (av[5])
-		args->n_eat = ft_atoi(av[5]);
+		args->num_of_meals = ft_atoi(av[5]);
 	args->fork = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * args->num);
 	if (!args->fork)
 		return (NULL);

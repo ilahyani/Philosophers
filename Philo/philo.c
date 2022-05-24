@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 10:35:53 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/23 14:29:42 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/24 11:08:21 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	main(int argc, char** argv)
 	if (philo_create(philo))
 		if(printf("Thread creation failed\n"))
 			return (0);
-	if ((pthread_create(&death_check, NULL, &is_dead, philo)) != 0)
+	if ((pthread_create(&death_check, NULL, &kill_thread, philo)) != 0)
 		if(printf("unexpected error occurred\n"))
 			return (0);
 	if ((pthread_detach(death_check)) != 0)
