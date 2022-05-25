@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 11:13:03 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/24 18:52:25 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/25 16:45:26 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	*routine(void *philo)
 	while (1)
 	{
 		if (p->id % 2 == 0)
-			ft_usleep(1000);
+			ft_usleep(2000);
 		if (eat(p))
 		{
 			thread_print(philo, "is sleeping...");
@@ -199,6 +199,7 @@ int	error_check(int argc, char** argv)
 {
 	int	i;
 
+	//shouldn't be bigger than int max
 	if ((argc != 5 && argc != 6))
 		return (1);
 	i = 0;
