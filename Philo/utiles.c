@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 11:13:03 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/27 16:40:21 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/27 17:33:16 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	error_check(int argc, char **argv)
 {
 	int	i;
 
-	if ((argc != 5 && argc != 6))
+	if ((argc != 5 && argc != 6) || ft_atoi(argv[1]) < 1)
 		return (1);
 	i = 0;
 	while (++i < argc)
