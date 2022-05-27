@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 10:35:53 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/24 18:01:22 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/27 16:42:38 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	main(int argc, char** argv)
+int	main(int argc, char **argv)
 {
 	t_philo			*philo;
 	pthread_t		death_check;
@@ -25,18 +25,15 @@ int	main(int argc, char** argv)
 	pthread_mutex_init(&philo->args->print, NULL);
 	pthread_mutex_lock(&philo->args->main);
 	if (philo_create(philo))
-		if(printf("Thread creation failed\n"))
+		if (printf("Thread creation failed\n"))
 			return (0);
 	if ((pthread_create(&death_check, NULL, &kill_thread, philo)) != 0)
-		if(printf("unexpected error occurred\n"))
+		if (printf("unexpected error occurred\n"))
 			return (0);
 	if ((pthread_detach(death_check)) != 0)
-		if(printf("unexpected error occurred\n"))
+		if (printf("unexpected error occurred\n"))
 			return (0);
 	pthread_mutex_lock(&philo->args->main);
-	pthread_mutex_unlock(&philo->args->main);
-	pthread_mutex_unlock(&philo->args->death);
-	pthread_mutex_destroy(&philo->args->main);
-	pthread_mutex_destroy(&philo->args->print);
+	clean_up(philo);
 	return (0);
 }
