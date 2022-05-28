@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 10:35:53 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/28 16:40:48 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/28 16:51:51 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	main(int argc, char **argv)
 {
-	t_philo			*philo;
+	t_philo	*philo;
 
 	if (error_check(argc, argv))
 		if (printf("Invalid Arguments, Please Try Again!\n"))
