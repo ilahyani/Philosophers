@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 15:39:34 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/28 16:40:54 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/28 16:49:35 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int	eat(t_philo *philo)
 {
-
 	pthread_mutex_lock(&philo->args->fork[philo->right_fork]);
 	thread_print(philo, "picked up the right fork");
 	if (philo->left_fork != -1)
