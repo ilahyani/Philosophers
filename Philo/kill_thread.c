@@ -6,20 +6,20 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 15:40:39 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/27 16:26:30 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/28 16:29:18 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	check_meals(t_philo	*p)
+int check_meals(t_philo *p)
 {
-	int	i;
+	int i;
 
 	i = -1;
 	while (++i < p->args->num)
 		if ((p + i)->meals < p->args->num_of_meals)
-			break ;
+			break;
 	if (i == p->args->num)
 	{
 		pthread_mutex_lock(&p->args->print);
@@ -30,9 +30,9 @@ int	check_meals(t_philo	*p)
 	return (0);
 }
 
-void	*kill_thread(void *philo)
+void *kill_thread(void *philo)
 {
-	t_philo	*p;
+	t_philo *p;
 
 	p = (t_philo *)philo;
 	while (1)

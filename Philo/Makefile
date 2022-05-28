@@ -6,11 +6,11 @@
 #    By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/10 10:47:02 by ilahyani          #+#    #+#              #
-#    Updated: 2022/05/27 17:25:57 by ilahyani         ###   ########.fr        #
+#    Updated: 2022/05/28 16:43:24 by ilahyani         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC = 	main.c utiles.c utiles_2.c get_args.c kill_thread.c philo_create.c routine.c
+SRC = 	main.c utiles.c error_check.c get_args.c kill_thread.c philo_create.c routine.c
 
 OBJ	=	$(SRC:.c=.o)
 

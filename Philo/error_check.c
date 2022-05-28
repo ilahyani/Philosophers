@@ -1,32 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utiles.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/30 10:35:53 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/28 16:40:48 by ilahyani         ###   ########.fr       */
+/*   Created: 2022/04/30 11:13:03 by ilahyani          #+#    #+#             */
+/*   Updated: 2022/05/28 16:41:30 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	main(int argc, char **argv)
+int	is_int(char *c)
 {
-	t_philo			*philo;
+	int	i;
 
-	if (error_check(argc, argv))
-		if (printf("Invalid Arguments, Please Try Again!\n"))
+	i = -1;
+	while (c[++i])
+		if (c[i] < '0' || c[i] > '9')
 			return (0);
-	philo = get_args(argv);
-	pthread_mutex_init(&philo->args->main, NULL);
-	pthread_mutex_init(&philo->args->print, NULL);
-	pthread_mutex_lock(&philo->args->main);
-	if (philo_create(philo))
-		if (printf("Thread creation failed\n"))
-			return (0);
-	pthread_mutex_lock(&philo->args->main);
-	clean_up(philo);
+	return (1);
+}
+
+int	error_check(int argc, char **argv)
+{
+	int	i;
+
+	if ((argc != 5 && argc != 6))
+		return (1);
+	if (ft_atoi(argv[1]) < 1)
+		return (1);
+	i = 0;
+	while (++i < argc)
+	{
+		if (!is_int(argv[i]))
+			return (1);
+		if (i == 5)
+			if (ft_atoi(argv[i]) < 1)
+				return (1);
+	}
 	return (0);
 }

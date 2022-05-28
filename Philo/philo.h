@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 10:36:52 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/27 17:24:43 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/28 16:37:09 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct args
 typedef struct philo
 {
 	pthread_t	ph;
+	pthread_t	checker;
 	t_args		*args;
 	long		start;
 	long		last_meal;
