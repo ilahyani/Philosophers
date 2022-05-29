@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 15:39:34 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/29 16:47:22 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/29 19:46:02 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	eat(t_philo *philo)
 void	*routine(void *philo)
 {
 	t_philo	*p;
-	
+
 	p = (t_philo *)philo;
 	if ((pthread_create(&p->checker, NULL, &kill_thread, p)) != 0)
 		return (NULL);

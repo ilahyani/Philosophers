@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 15:44:32 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/29 19:36:51 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/29 19:45:51 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,16 @@ long	ft_time(void)
 
 int	philo_create(t_philo *philo)
 {
-	int	i;
+	int		i;
+	long	start_time;
 
-	long start_time = ft_time();
+	start_time = ft_time();
 	i = -1;
 	while (++i < philo->args->num)
 	{
 		philo[i].start = start_time;
 		if ((pthread_create(&philo[i].ph, NULL, &routine, &philo[i])) != 0)
-		 	return (1);
+			return (1);
 		if ((pthread_detach(philo[i].ph) != 0))
 			return (1);
 		ft_usleep(1);

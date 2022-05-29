@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 15:45:29 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/29 19:41:42 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/29 19:46:32 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	ft_usleep(long time)
 	long	t_time;
 
 	t_time = ft_time();
-	usleep(time*0.8*1000);
+	usleep(time * 0.8 * 1000);
 	while (ft_time() - t_time < time)
 		usleep(50);
 }
