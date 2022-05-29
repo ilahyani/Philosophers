@@ -6,17 +6,17 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 15:45:29 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/28 16:53:31 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/29 19:41:42 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	ft_atoi(char *str)
+long long	ft_atoi(char *str)
 {
-	int	i;
-	int	res;
-	int	sign;
+	int			i;
+	long long	res;
+	int			sign;
 
 	res = 0;
 	sign = 1;
@@ -29,11 +29,8 @@ int	ft_atoi(char *str)
 		|| str[i] == '\r')
 		i++;
 	if (str[i] == '-' || str[i] == '+')
-	{
-		if (str[i] == '-')
+		if (str[i++] == '-')
 			sign *= -1;
-		i++;
-	}
 	if (str[i] == '+' || str[i] == '-')
 		return (0);
 	while (str[i] >= '0' && str[i] <= '9')
@@ -41,28 +38,32 @@ int	ft_atoi(char *str)
 	return (res * sign);
 }
 
-long	ft_time(void)
-{
-	struct timeval	current_time;
-
-	gettimeofday(&current_time, NULL);
-	return ((current_time.tv_sec * 1000) + (current_time.tv_usec / 1000));
-}
-
-void	ft_usleep(useconds_t time)
+void	ft_usleep(long time)
 {
 	long	t_time;
 
 	t_time = ft_time();
+	usleep(time*0.8*1000);
 	while (ft_time() - t_time < time)
-		usleep(300);
+		usleep(50);
+}
+
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	size_t	i;
+
+	i = 0;
+	while (s1[i] && s2[i] && s1[i] == s2[i])
+		i++;
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
 void	thread_print(t_philo *philo, char *str)
 {
 	pthread_mutex_lock(&philo->args->print);
-	printf("%ld philo %d %s\n", ft_time() - philo->start, philo->id + 1, str);
-	pthread_mutex_unlock(&philo->args->print);
+	printf("%ld %d %s\n", ft_time() - philo->start, philo->id + 1, str);
+	if (ft_strcmp(str, "died"))
+		pthread_mutex_unlock(&philo->args->print);
 }
 
 void	clean_up(t_philo *philo)

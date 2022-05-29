@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 15:40:39 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/28 16:47:42 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/29 19:40:26 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,16 @@ void	*kill_thread(void *philo)
 	p = (t_philo *)philo;
 	while (1)
 	{
-		if (ft_time() - p->last_meal >= p->args->t_die)
+		if (ft_time() - p->last_meal > p->args->t_die)
 		{
 			pthread_mutex_lock(&p->args->death);
 			thread_print(philo, "died");
-			pthread_mutex_lock(&p->args->print);
 			pthread_mutex_unlock(&p->args->main);
 			return (NULL);
 		}
 		if (p->args->num_of_meals)
 			if (check_meals(p))
 				return (NULL);
+		usleep(50);
 	}
 }

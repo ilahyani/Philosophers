@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 15:42:25 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/28 16:37:42 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/29 19:33:10 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,6 @@ t_philo	*get_args(char **av)
 		return (NULL);
 	i = -1;
 	while (++i < args->num)
-		pthread_mutex_init(&args->fork[i], NULL);
-	i = -1;
-	while (++i < args->num)
 	{
 		philo[i].id = i;
 		philo[i].right_fork = i;
@@ -55,6 +52,7 @@ t_philo	*get_args(char **av)
 		philo[i].last_meal = ft_time();
 		philo[i].meals = 0;
 		philo[i].args = args;
+		pthread_mutex_init(&args->fork[i], NULL);
 	}
 	return (philo);
 }

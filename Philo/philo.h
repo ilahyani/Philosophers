@@ -6,7 +6,7 @@
 /*   By: ilahyani <ilahyani@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/30 10:36:52 by ilahyani          #+#    #+#             */
-/*   Updated: 2022/05/28 16:37:09 by ilahyani         ###   ########.fr       */
+/*   Updated: 2022/05/29 10:53:48 by ilahyani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ t_philo		*get_args(char **av);
 t_args		*get_data(char **av);
 int			is_int(char *c);
 int			error_check(int argc, char **argv);
-int			ft_atoi(char *str);
+long long	ft_atoi(char *str);
 int			philo_create(t_philo *philo);
 void		*routine(void *philo);
 int			eat(t_philo *philo);
@@ -58,6 +58,6 @@ void		thread_print(t_philo *philo, char *str);
 void		*kill_thread(void *philo);
 int			check_meals(t_philo	*p);
 void		clean_up(t_philo *philo);
-void		ft_usleep(useconds_t time);
+void		ft_usleep(long time);
 
 #endif
